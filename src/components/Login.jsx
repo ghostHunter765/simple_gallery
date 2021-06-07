@@ -6,6 +6,7 @@ import {Link, useHistory} from 'react-router-dom'
 
  const Login = () => {
      const [user, setuser] = useState({})
+     const [isLoading, setisLoading] = useState(false)
      //TODO: desable the button
     // const [disabled, setdisabled] = useState(false)
      const contextValues=UseAuth()
@@ -20,7 +21,9 @@ import {Link, useHistory} from 'react-router-dom'
       const handleLogin =async () => {
           //setdisabled(true)
           try {
+              setisLoading(true)
             const response=await contextValues.loginUser(user.username,user.password) ;
+            setisLoading(false)
             if(response.user ){
                 setTimeout(() => {
                     history.replace('/')
@@ -40,7 +43,10 @@ import {Link, useHistory} from 'react-router-dom'
             <form onSubmit={(e)=>{e.preventDefault();handleLogin()}}>
                 <InputBox value={user.username} type="text" name="username" handleOnchange={handleOnchange}></InputBox>
                 <InputBox value={user.password} type="password" name="password" handleOnchange={handleOnchange}></InputBox>
-                <InputButton ></InputButton>
+                <div style={{display:"flex"}}>
+                <InputButton name='Log In'></InputButton>
+                {isLoading?<div className='loader'></div>:<></>} 
+            </div>
             </form>
             <div className="customlink-1">
                     <Link  to='/resetpw'>Fogot Password?</Link>

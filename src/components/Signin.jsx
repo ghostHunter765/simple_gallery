@@ -7,6 +7,7 @@ import {Link, useHistory} from 'react-router-dom'
 export default function Signin() {
 
     const [user, setuser] = useState({})
+    const [isLoading, setisLoading] = useState(false)
     //TODO: desable the button
    // const [disabled, setdisabled] = useState(false)
     const contextValues=UseAuth()
@@ -15,7 +16,9 @@ export default function Signin() {
    const handleLogin=async()=>{
       if(user.password1===user.password2){
         try {
+            setisLoading(true)
             const response =await contextValues.signinUser(user.username,user.password1);
+            setisLoading(false);
             if(response.user ){
                 setTimeout(() => {
                     history.replace('/')
@@ -45,7 +48,10 @@ export default function Signin() {
                 <InputBox value={user.username} type="text" name="username" handleOnchange={handleOnchange}></InputBox>
                 <InputBox value={user.password1} type="password" name="password1" handleOnchange={handleOnchange}></InputBox>
                 <InputBox value={user.password2} type="password" name="password2" handleOnchange={handleOnchange}></InputBox>
-                <InputButton ></InputButton>
+                <div style={{display:"flex"}}>
+                <InputButton name='Sign In'></InputButton>
+                {isLoading?<div className='loader'></div>:<></>} 
+            </div>
                 <hr></hr>
             </form>
             <div className='customlink-2'>

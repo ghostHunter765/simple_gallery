@@ -2,10 +2,11 @@ import React,{useState} from 'react'
 import InputBox from './InputBox'
 import InputButton from './InputButton';
 import { UseAuth } from '../context/AuthContext'
-import {useHistory} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 
 function PasswordReset() {
     const [email, setemail] = useState()
+    const [isloading, setisloading] = useState(false)
     const CustomContext =UseAuth()
     const history=useHistory()
 
@@ -14,7 +15,9 @@ function PasswordReset() {
     }
 
     const sendCode = async() => {
+        setisloading(true)
       const response=await CustomContext.sendRestPasswordCode(email);
+      setisloading(false)
     if(response===undefined){
         alert("The password reset code sent to email go and check it")
         history.replace('/login')
@@ -32,9 +35,14 @@ function PasswordReset() {
         <div className='form-main'>
             <form onSubmit={(e)=>{e.preventDefault();sendCode()}}>
             <InputBox type='text' name="email" value={email} handleOnchange={handleOnchange}></InputBox>
-            <InputButton></InputButton>
+            <div style={{display:"flex"}}>
+                <InputButton name='Send'></InputButton>
+                {isloading?<div className='loader'></div>:<></>} 
+            </div>
             </form>
+            
         </div>
+        <Link to='/login'>Go Back</Link>
         </div>
     )
 }
