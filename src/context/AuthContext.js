@@ -15,7 +15,30 @@ const AuthContext = ({ children }) => {
       );
       return response;
     } catch (error) {
-      console.log("error", error);
+      alert(error);
+      return error;
+    }
+  };
+
+  const signinUser = async (username, password) => {
+    try {
+      const response = await auth.createUserWithEmailAndPassword(
+        username,
+        password
+      );
+      return response;
+    } catch (error) {
+      alert(error);
+      return error;
+    }
+  };
+
+  const sendRestPasswordCode = async (email) => {
+    try {
+      const response = await auth.sendPasswordResetEmail(email);
+      return response;
+    } catch (error) {
+      return error;
     }
   };
 
@@ -28,18 +51,20 @@ const AuthContext = ({ children }) => {
     }
   };
 
-  const values = {
-    currentUser: currentUser,
-    loginUser: loginUser,
-    logout: logout,
-  };
-
   useEffect(() => {
     auth.onAuthStateChanged((e) => {
       console.log("state", e);
       setUser(e);
     });
   }, []);
+
+  const values = {
+    currentUser: currentUser,
+    loginUser: loginUser,
+    signinUser: signinUser,
+    logout: logout,
+    sendRestPasswordCode: sendRestPasswordCode,
+  };
 
   return (
     <CustomContext.Provider value={values}>{children}</CustomContext.Provider>

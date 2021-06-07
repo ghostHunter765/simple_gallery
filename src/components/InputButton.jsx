@@ -1,10 +1,11 @@
 import React from 'react'
 
-const InputButton = () => {
+const InputButton = (props) => {
     return (
-        <div>
-            <input type='submit'></input>
+        <div className="inputbutton-container">
+        <input className='inputbutton' disabled={props.disabled} type='submit'></input>
         </div>
+
     )
 }
 
